@@ -35,7 +35,7 @@ echo "Creation du fichier de log" | tee -a $LOGFILE
 }
 
 check_services-status () {
-echo Backend Status : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")
+echo "Backend Status" : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")
 
 ssh_execute_command () {
 local target=$1
