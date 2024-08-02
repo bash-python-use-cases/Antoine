@@ -22,6 +22,15 @@ WP_LANGUAGE="fr_FR"
 WP_THEME="twentynineteen"
 SSH_KEY_PATH="/home/admsys/sshkey"
 
+# Fichier de log
+LOGFILE="deploy_wordpress.log"
+
+####################
+
+log () {
+echo "Creation du fichier de log" | tee -a $LOGFILE
+}
+
 ssh_execute_command () {
 local target=$1
 local commands=$2
