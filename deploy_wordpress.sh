@@ -21,8 +21,8 @@ generate_password() {
 }
 
 load_env_vars() {
-    FRONTEND_IP=${FRONTEND_IP:?"51.158.160.190"}
-    BACKEND_IP=${BACKEND_IP:?"51.158.174.245"}
+    FRONTEND_IP=${FRONTEND_IP:?"51.15.123.197"}
+    BACKEND_IP=${BACKEND_IP:?"51.15.42.188"}
     DOMAIN=${DOMAIN:?"apache.${FRONTEND_IP}.nip.io"}
 
     DB_NAME=${DB_NAME:-"wordpress"}
