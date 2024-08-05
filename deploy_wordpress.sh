@@ -24,21 +24,26 @@ SSH_KEY_PATH="/home/admsys/sshkey"
 
 # Fichier de log
 LOGFILE="deploy_wordpress.log"
+timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 
 ####################
 
-log () {
-echo "Creation du fichier de log" | tee -a $LOGFILE
-}
-
 check_services_status () {
-echo Backend Status : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")
+echo "Backend Status : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")"
+echo "Frontend Status : $(ssh_execute_command $FRONTEND_IP "sudo systemctl is-active httpd")"
+
+log () {
+echo "Log $timestamp" | tee -a $LOGFILE
 }
 
 ssh_execute_command () {
 local target=$1
 local commands=$2
-ssh -i $SSH_KEY_PATH -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null wpadmin@${target} "$commands"
+local options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+ssh -i $SSH_KEY_PATH "$options" wpadmin@${target} "$commands" | tee -a $LOGFILE
 }
 
-ssh_execute_command $BACKEND_IP "cat /etc/hostname"
+ssh_execute_command $BACKEND_IP "cat /etc/hostname ; \
+cat /etc/hostname ; \
+cat /etc/hostname"
+
