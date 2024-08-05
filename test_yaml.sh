@@ -1,6 +1,6 @@
 CONFIG_FILE=config.yml
 
-read_yaml() {
+parse_yaml() {
     python -c "import yaml
 with open('$1', 'r') as file:
     data = yaml.safe_load(file)
@@ -9,4 +9,5 @@ for key, value in data.items():
 "
 }
 
-read_yaml $CONFIG_FILE
+eval $(parse_yaml $CONFIG_FILE)
+echo $FRONTEND_IP
