@@ -22,7 +22,7 @@ wp_theme: "twentynineteen"
 wp_language: "fr_FR"
 
 # Chemin de la clé SSH pour les connexions
-ssh_key_path: "/root/wpadmin"
+ssh_key_path: "sshkey"
 
 # Serveur web à utiliser (apache ou nginx)
 web_server: "apache"
