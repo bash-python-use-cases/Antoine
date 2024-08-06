@@ -134,12 +134,11 @@ set local status
 log "Wordpress Status : $status - $url"
 }
 
-options=$1
-
+option=$1
 if [[ -z $1 ]] ; then 
 echo "Choose one option deploy or status"  ; exit 1
 else
-case "$options" in
+case "$option" in
   deploy)
     load_config
     load_env_vars
