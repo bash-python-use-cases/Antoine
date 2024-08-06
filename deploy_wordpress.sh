@@ -43,8 +43,8 @@ load_env_vars() {
 }
 
 check_services_status () {
-echo "Backend Status : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")"
-echo "Frontend Status : $(ssh_execute_command $FRONTEND_IP "sudo systemctl is-active httpd")"
+log "Backend Status : $(ssh_execute_command $BACKEND_IP "sudo systemctl is-active mariadb")"
+log "Frontend Status : $(ssh_execute_command $FRONTEND_IP "sudo systemctl is-active httpd")"
 }
 
 log () {
@@ -69,8 +69,8 @@ setup_backend() {
         sudo firewall-cmd --reload ; \
         sudo systemctl start mariadb ; \
         sudo systemctl enable mariadb ; \
-        echo -e '\\ny\\n$DB_ROOT_PASSWORD\\n$DB_ROOT_PASSWORD\\ny\\ny\\ny\\ny\\n' | sudo mysql_secure_installation ; \
-        sudo mysql -p${DB_ROOT_PASSWORD} -e \"CREATE DATABASE ${DB_NAME};CREATE USER '${DB_USER}'@'${FRONTEND_IP}' IDENTIFIED BY '${DB_PASSWORD}';CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'${FRONTEND_IP}';GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';FLUSH PRIVILEGES;\""
+        sudo mysql -p${DB_ROOT_PASSWORD} -e \"exit\" || echo -e '\\ny\\n$DB_ROOT_PASSWORD\\n$DB_ROOT_PASSWORD\\ny\\ny\\ny\\ny\\n' | sudo mysql_secure_installation ; \
+        sudo mysql -u ${DB_USER} -p${DB_PASSWORD} -e \"exit\" || sudo mysql -p${DB_ROOT_PASSWORD} -e \"CREATE DATABASE ${DB_NAME};CREATE USER '${DB_USER}'@'${FRONTEND_IP}' IDENTIFIED BY '${DB_PASSWORD}';CREATE USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'${FRONTEND_IP}';GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'localhost';FLUSH PRIVILEGES;\""
     log "Backend setup completed"
 }
 
@@ -116,6 +116,7 @@ setup_frontend() {
         sudo mv wp-cli.phar /usr/bin/wp
         sudo chown apache:apache -R /var/www/html
         sudo chmod 755 -R /var/www/html
+        sudo chown -R apache /usr/share/httpd
         sudo -u apache wp core download --path=/var/www/html
         sudo -u apache wp config create --dbname=${DB_NAME} --dbuser=${DB_USER} --dbpass=${DB_PASSWORD} --path=/var/www/html --dbhost=${BACKEND_IP}
         sudo -u apache wp core install --url=$DOMAIN --title='WordPress Site' --admin_user=$WP_ADMIN_USER --admin_password=$WP_ADMIN_PASSWORD --admin_email=$WP_ADMIN_EMAIL --skip-email --path=/var/www/html/
@@ -130,14 +131,15 @@ check_wordpress_status () {
 local url=${1:-"https://$DOMAIN/wp-login.php"}
 set local status
 
-[[ $(curl -s $url | grep "loginform") ]] && status=Active || status=Inactive
-log "Wordpress Status : $status - $url"
+[[ $(curl -s $url | grep "loginform") ]] && status=active || status=inactive
+log "Wordpress Status :  $status - $url"
 }
 
-option=$1
 if [[ -z $1 ]] ; then 
 echo "Choose one option deploy or status"  ; exit 1
 else
+
+option=$1
 case "$option" in
   deploy)
     load_config
@@ -162,5 +164,3 @@ case "$option" in
     ;;
 esac
 fi
-
-echo "https://$DOMAIN/wp-login.php"
