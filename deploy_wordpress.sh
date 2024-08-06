@@ -16,14 +16,14 @@ eval $(parse_yaml $CONFIG_FILE)
 }
 
 load_env_vars() {
-    FRONTEND_IP=${FRONTEND_IP:?"51.158.167.76"}
-    BACKEND_IP=${BACKEND_IP:?"51.158.191.32"}
-    DOMAIN=${DOMAIN:?"apache.${FRONTEND_IP}.nip.io"}
+    FRONTEND_IP=${FRONTEND_IP:?"FRONTEND_IP is required"}
+    BACKEND_IP=${BACKEND_IP:?"BACKEND_IP is required"}
+    DOMAIN=${DOMAIN:?"DOMAIN is required"}
 
     DB_NAME=${DB_NAME:-"wordpress"}
     DB_USER=${DB_USER:-"wp_user"}
-    DB_PASSWORD=${Test1234}
-    DB_ROOT_PASSWORD=${Test1234}
+    DB_PASSWORD=${DB_PASSWORD:-$(generate_password)}
+    DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-$(generate_password)}
 
     WP_ADMIN_USER=${WP_ADMIN_USER:-"admin"}
     WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-$(generate_password)}
@@ -125,3 +125,4 @@ load_env_vars
 setup_backend
 setup_frontend
 check_services_status
+echo "https://$DOMAIN/wp-login.php"
