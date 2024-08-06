@@ -15,6 +15,11 @@ load_config () {
 eval $(parse_yaml $CONFIG_FILE)
 }
 
+generate_password() {
+  local length=${1:-"32"}
+  openssl rand -base64 $((length * 3 / 4)) | cut -c1-$length
+}
+
 load_env_vars() {
     FRONTEND_IP=${FRONTEND_IP:?"FRONTEND_IP is required"}
     BACKEND_IP=${BACKEND_IP:?"BACKEND_IP is required"}
