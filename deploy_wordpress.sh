@@ -12,6 +12,7 @@ for key, value in data.items():
 }
 
 load_config () {
+log "load configurtation ..."
 eval $(parse_yaml $CONFIG_FILE)
 }
 
@@ -54,7 +55,7 @@ echo $(date +'%Y-%m-%d %T') $message | tee -a $LOGFILE
 ssh_execute_command () {
 local target=$1
 local commands=$2
-local options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+local options="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR"
 ssh -i $SSH_KEY_PATH $options wpadmin@${target} "$commands" | tee -a $LOGFILE
 }
 
