@@ -9,8 +9,8 @@ domain: "apache.51.158.167.76.nip.io"
 # Configuration de la base de données
 db_name: "wordpress"
 db_user: "wp_user"
-#db_password: "super_secure_password"
-#db_root_password: "root_super_secure_password"
+db_password: "super_secure_password"
+db_root_password: "root_super_secure_password"
 
 # Configuration de l'administrateur WordPress
 wp_admin_user: "admin"
