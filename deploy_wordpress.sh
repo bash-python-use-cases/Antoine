@@ -15,20 +15,15 @@ load_config () {
 eval $(parse_yaml $CONFIG_FILE)
 }
 
-generate_password() {
-  local length=${1:-"32"}
-  openssl rand -base64 $((length * 3 / 4)) | cut -c1-$length
-}
-
 load_env_vars() {
-    FRONTEND_IP=${FRONTEND_IP:?"51.15.123.197"}
-    BACKEND_IP=${BACKEND_IP:?"51.15.42.188"}
+    FRONTEND_IP=${FRONTEND_IP:?"51.158.167.76"}
+    BACKEND_IP=${BACKEND_IP:?"51.158.191.32"}
     DOMAIN=${DOMAIN:?"apache.${FRONTEND_IP}.nip.io"}
 
     DB_NAME=${DB_NAME:-"wordpress"}
     DB_USER=${DB_USER:-"wp_user"}
-    DB_PASSWORD=${DB_PASSWORD:-$(generate_password)}
-    DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-$(generate_password)}
+    DB_PASSWORD=${Test1234}
+    DB_ROOT_PASSWORD=${Test1234}
 
     WP_ADMIN_USER=${WP_ADMIN_USER:-"admin"}
     WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD:-$(generate_password)}
