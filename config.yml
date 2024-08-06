@@ -1,10 +1,10 @@
 
 # Configuration du serveur frontal (frontend)
-frontend_ip: "51.15.123.197"
+frontend_ip: "51.158.167.76"
 # Configuration du serveur backend (base de données)
-backend_ip: "51.15.42.188"
+backend_ip: "51.158.191.32"
 # Domaine pour le site WordPress
-domain: "apache.51.15.123.197.nip.io"
+domain: "apache.51.158.167.76.nip.io"
 
 # Configuration de la base de données
 db_name: "wordpress"
