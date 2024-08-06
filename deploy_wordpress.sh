@@ -130,7 +130,7 @@ check_wordpress_status () {
 local url=${1:-"https://$DOMAIN/wp-login.php"}
 set local status
 
-[[ $(curl -s $url | grep "loginform") ]] ; && status=Active; || status=Inactive
+[[ $(curl -s $url | grep "loginform") ]] && status=Active || status=Inactive
 log "Wordpress Status : $status - $url"
 }
 
