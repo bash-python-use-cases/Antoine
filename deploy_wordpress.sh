@@ -126,9 +126,42 @@ setup_frontend() {
     log "WordPress configuration completed"
 }
 
-load_config
-load_env_vars
-setup_backend
-setup_frontend
-check_services_status
+check_wordpress_status () {
+local url=${1:-"https://$DOMAIN/wp-login.php"}
+set local status
+
+[[ $(curl -s $url | grep "loginform") ]] ; && status=Active; || status=Inactive
+log "Wordpress Status : $status - $url"
+}
+
+options=$1
+
+if [[ -z $1 ]] ; then 
+echo "Choose one option deploy or status"  ; exit 1
+else
+case "$options" in
+  deploy)
+    load_config
+    load_env_vars
+    setup_backend
+    setup_frontend
+    check_services_status
+    check_wordpress_status
+    ;;
+  status)
+    load_config
+    load_env_vars
+    check_services_status
+    check_wordpress_status
+    ;;
+  help)
+    # commands for pattern3
+    ;;
+  *)
+    echo "Choose one option deploy or status"
+    exit 1
+    ;;
+esac
+fi
+
 echo "https://$DOMAIN/wp-login.php"
